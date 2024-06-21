@@ -30,10 +30,12 @@ public class Rook extends Piece{
         return moves;
     }
 
+    //used to check if the rook has moved (getter method)
     public boolean getHasMoved(){
         return this.hasMoved;
     }
 
+    //used to update weather or not the rook has moved (setter method)
     public void setHasMoved(boolean newHasMoved){
         this.hasMoved = newHasMoved;
     }
@@ -121,16 +123,25 @@ public class Rook extends Piece{
             }
         }
     }
-    public void addMove(String move, String typeOfMove, HashMap<String, Piece> board, HashMap<String, String> moves, String turn, int kingXPos, int kingYPos){
+    //helper method used to see if the move that can be made by the piece will ensure the kings saftey
+    private void addMove(String move, String typeOfMove, HashMap<String, Piece> board, HashMap<String, String> moves, String turn, int kingXPos, int kingYPos){
+        //stores the piece that will be moved
         Piece removedPiece = null;
+        //checks to see if the board contains the move that the user can make
         if(board.containsKey(move)){
+            //gets the piece that will be moved
             removedPiece = board.get(move);
         }
+        //places the piece in its new position
         board.put(move, board.get(super.getXPos()+","+super.getYPos()));
+        //removes the old position piece
         board.remove(super.getXPos()+","+super.getYPos());
+        //checks to see if the king is safe
         if(super.isKingSafe(board, turn, kingXPos, kingYPos)){
+            //means the move is valid
             moves.put(move, typeOfMove);
         }
+        //resets the board changes
         board.put(super.getXPos()+","+super.getYPos(), board.get(move));
         board.remove(move);
         if(removedPiece != null){

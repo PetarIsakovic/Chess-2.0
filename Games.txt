@@ -1,0 +1,31 @@
+This is a file with all of the games/moves ever played
+
+NEW GAME
+1: white Pawn on 4,6 moved to 4,4
+2: black Pawn on 4,1 moved to 4,3
+3: white Bishop on 5,7 moved to 2,4
+4: black Bishop on 5,0 moved to 2,3
+
+NEW GAME
+1: white Pawn on 4,6 moved to 4,4
+2: black Pawn on 4,1 moved to 4,3
+3: white Bishop on 5,7 moved to 2,4
+4: black Pawn on 6,1 moved to 6,2
+5: white Queen on 3,7 moved to 5,5
+6: black Pawn on 7,1 moved to 7,2
+7: white Queen on 5,5 moved to 5,1
+
+NEW GAME
+1: white Pawn on 4,6 moved to 4,4
+2: black Pawn on 4,1 moved to 4,3
+3: white Bishop on 5,7 moved to 2,4
+4: black Bishop on 5,0 moved to 2,3
+5: white Queen on 3,7 moved to 7,3
+6: black Pawn on 6,1 moved to 6,2
+7: white Queen on 7,3 moved to 5,5
+8: black Knight on 6,0 moved to 5,2
+9: white Knight on 6,7 moved to 7,5
+10: black Pawn on 6,2 moved to 6,3
+11: white King on 4,7 moved to 6,7
+12: black Pawn on 6,3 moved to 6,4
+13: white Queen on 5,5 moved to 6,4

@@ -63,8 +63,9 @@ public class Piece {
         return null;
     }
 
+    //used to check if the king is in check
     public boolean isKingSafe(HashMap<String, Piece> board, String turn, int kingXPos, int kingYPos){
-        //check to the right
+        //looks for a check coming from the right
         for(int i = kingXPos+1; i < 8; i++){
             String piece = i + "," + kingYPos;
             if(board.containsKey(piece)){
@@ -77,7 +78,7 @@ public class Piece {
             }
         }
 
-        //check to the left
+        //looks for a check coming from the left
         for(int i = kingXPos-1; i>=0; i--){
             String piece = i + "," + kingYPos;
             if(board.containsKey(piece)){
@@ -90,7 +91,7 @@ public class Piece {
             }
         }
 
-        //check down
+        //looks for a check coming from below
         for(int i = kingYPos+1; i < 8; i++){
             String piece = kingXPos + "," + i;
             if(board.containsKey(piece)){
@@ -103,7 +104,7 @@ public class Piece {
             }
         }
 
-        //check up
+        //looks for a check coming from above
         for(int i = kingYPos-1; i >= 0; i--){
             String piece = kingXPos + "," + i;
             if(board.containsKey(piece)){
@@ -116,7 +117,7 @@ public class Piece {
             }
         }
 
-        //bottom right
+        //looks for a check coming from the bottom right
         for(int i = kingXPos+1; i < 8; i++){
             if(kingYPos + (i-kingXPos) < 8){
                 String piece = i + "," + (kingYPos+(i-kingXPos));
@@ -134,7 +135,7 @@ public class Piece {
             }
         }
 
-        //top right
+        //looks for a check coming from the top right
         for(int i = kingXPos+1; i < 8; i++){
             if(kingYPos - (i-kingXPos) >= 0){
                 String piece = i + "," + (kingYPos-(i-kingXPos));
@@ -152,7 +153,7 @@ public class Piece {
             }
         }
 
-        //bottom left
+        //looks for a check coming from the bottom left
         for(int i = kingXPos-1; i >= 0; i--){
             if(kingYPos + (kingXPos-i) < 8){
                 String piece = i + "," + (kingYPos+(kingXPos-i));
@@ -170,7 +171,7 @@ public class Piece {
             }
         }
 
-        //top left
+        //looks for a check coming from the top left
         for(int i = kingXPos-1; i >= 0; i--){
             if(kingYPos - (kingXPos-i) >= 0){
                 String piece = i + "," + (kingYPos-(kingXPos-i));
@@ -188,26 +189,27 @@ public class Piece {
             }
         }
 
-        //check for pawn checks
+        //check for pawn checks coming from white side
         if(turn.equals("black")){
-            //bottom right
+            //check for bottom right pawn
             String piece = (kingXPos+1) + "," + (kingYPos+1);
             if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Pawn){
                 return false;
             }
-            //bottom left
+            //check for bottom left pawn
             piece = (kingXPos-1) + "," + (kingYPos+1);
             if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Pawn){
                 return false;
             }
         }
+        //check for pawn checks coming from black side
         else if(turn.equals("white")){
-            //top right
+            //check for top right pawn
             String piece = (kingXPos+1) + "," + (kingYPos-1);
             if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Pawn){
                 return false;
             }
-            //top left
+            //check for top left pawn
             piece = (kingXPos-1) + "," + (kingYPos-1);
             if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Pawn){
                 return false;
@@ -219,47 +221,39 @@ public class Piece {
         if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Knight){
             return false;
         }
-
         piece = (kingXPos+2) + "," + (kingYPos+1);
         if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Knight){
             return false;
         }
-
         piece = (kingXPos-2) + "," + (kingYPos-1);
         if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Knight){
             return false;
         }
-
         piece = (kingXPos-2) + "," + (kingYPos+1);
         if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Knight){
             return false;
         }
-
         piece = (kingXPos+1) + "," + (kingYPos-2);
         if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Knight){
             return false;
         }
-
         piece = (kingXPos+1) + "," + (kingYPos-2);
         if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Knight){
             return false;
         }
-
         piece = (kingXPos+1) + "," + (kingYPos+2);
         if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Knight){
             return false;
         }
-
         piece = (kingXPos-1) + "," + (kingYPos-2);
         if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Knight){
             return false;
         }
-
         piece = (kingXPos-1) + "," + (kingYPos+2);
         if(board.containsKey(piece) && !board.get(piece).getColor().equals(turn) && board.get(piece) instanceof Knight){
             return false;
         }
-        
+        //means the king is safe
         return true;
     }
 
@@ -273,10 +267,11 @@ public class Piece {
         
     }
 
+    //used to check if a piece has been moved
     public boolean getHasMoved(){
         return true;
     }
-
+    //used to update weather or not a piece has been moved
     public void setHasMoved(boolean newHasMoved){
     }
     

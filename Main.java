@@ -1,13 +1,15 @@
 import java.awt.*;
-import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.ArrayList;
 
 public class Main {
     //fps of the game
@@ -51,17 +53,23 @@ public class Main {
     //used to store the possible move that a piece can make
     HashMap<String, String> possibleMoves;
 
+    //stores the black kings x and y position
     int blackKingXPos = 4;
     int blackKingYPos = 0;
 
+    //stores the white kings x and y position
     int whiteKingXPos = 4;
     int whiteKingYPos = 7;
 
+    //checks if mouse is pressed/released
     boolean mousePressed = false;
-    
     boolean mouseReleased = false;
 
+    //used to "hold" the MouseEvent object created in any of the mouse event handlers
     MouseEvent holder;
+
+    //stores the amount of moves made in the game so far
+    int moveNumberInGame = 1;
 
     //used to store what players turn it is
     String turn = "white";
@@ -115,6 +123,56 @@ public class Main {
         possibleMoves = new HashMap<>();
     }
 
+    //used to update the Games.txt file
+    public void newMoveMade(String move){
+        //makes an arraylist that will store all previous games/moves
+        ArrayList<String> games = new ArrayList<>();
+
+        //creates a scanner object
+        Scanner scan = null;
+        try{
+            //sets the scanner to scan the file called "Games.txt"
+            scan = new Scanner(new File("Games.txt"));
+        }
+        //used for error handling
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        //loops through every single line in the Games.txt file
+        while(scan.hasNextLine()){
+            //adds each line in the file to the arraylist
+            games.add(scan.nextLine());
+        }
+        //closes the scanner
+        scan.close();
+
+        //used to write a new file
+        try{
+            //makes the new file
+            FileWriter newFile = new FileWriter("Games.txt");
+            //loops through all of the previous games/moves
+            for(int i = 0; i < games.size(); i++){
+                //adds each game/move to the file
+                newFile.write(games.get(i) + "\n");
+            }
+            //checks if the current move count in the current game is equal to one
+            if(moveNumberInGame == 1){
+                //means a new game has been started
+                newFile.write("\nNEW GAME\n");
+            }
+            //adds the new move to the game
+            newFile.write(move);
+            //closes the FileWriter
+            newFile.close();
+        }
+        //used for error handling
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
     //NOT NEEDED CODE REMOVE LATER!!!!!!
     public void loop() {
         if(mousePressed){
@@ -150,6 +208,19 @@ public class Main {
                 //holds the coordinate where the piece was just picked up
                 String coordinateOfPickUp = clickXPos + "," + clickYPos;
 
+                //holds the moveNameThatThePlayerWill Make
+                String moveName = "";
+                //adds the current move #
+                moveName += moveNumberInGame + ": ";
+                //adds the color of the piece
+                moveName += turn + " ";
+                //adds the name of the piece
+                moveName += board.get(coordinateOfPickUp).getClass().getSimpleName();
+                //states position on board
+                moveName += " on " + coordinateOfPickUp + " moved to ";
+                //states new position
+                moveName += coordinateOfRelease;
+
                 //checks if the possible moves that the player can make with the piece that was selected contains the coordinates of where the piece was released
                 if(possibleMoves.containsKey((coordinateOfRelease))){
                     //checks to see if that current move that the player is making an enpasant move
@@ -164,15 +235,19 @@ public class Main {
                     if(board.get(coordinateOfPickUp) instanceof King){
                         //means the king has moved
                         board.get(coordinateOfPickUp).setHasMoved(true);
+                        //checks to see if the current players turn is white
                         if(turn.equals("white")){
                             whiteKingXPos = holder.getX()/sizeOfSquares;
                             whiteKingYPos = holder.getY()/sizeOfSquares;
                         }
+                        //checks to see if the current players turn is black
                         else if(turn.equals("black")){
                             blackKingXPos = holder.getX()/sizeOfSquares;
                             blackKingYPos = holder.getY()/sizeOfSquares;
                         }
+                        //checks to see if the player is castling right
                         if(possibleMoves.get(coordinateOfRelease).equals("castle right")){
+                            //updates board to castle right
                             String coordOfRook = (board.get(coordinateOfPickUp).getXPos()+3) + "," + board.get(coordinateOfPickUp).getYPos();
                             Piece rook = board.get(coordOfRook);
                             rook.setXPos(board.get(coordinateOfPickUp).getXPos()+1);
@@ -180,7 +255,9 @@ public class Main {
                             board.put(rook.getXPos() + "," + rook.getYPos(), rook);
                             board.remove(coordOfRook);
                         }
+                        //checks to see if the player is castling left
                         else if(possibleMoves.get(coordinateOfRelease).equals("castle left")){
+                            //updates board to castle left
                             String coordOfRook = (board.get(coordinateOfPickUp).getXPos()-4) + "," + board.get(coordinateOfPickUp).getYPos();
                             Piece rook = board.get(coordOfRook);
                             rook.setXPos(board.get(coordinateOfPickUp).getXPos()-1);
@@ -204,6 +281,9 @@ public class Main {
                     //updates the actual x position and y position of the piece's object
                     board.get(coordinateOfRelease).setXPos(holder.getX()/sizeOfSquares);
                     board.get(coordinateOfRelease).setYPos(holder.getY()/sizeOfSquares);
+
+                    newMoveMade(moveName);
+                    moveNumberInGame++;
                     
                     //checks to see if the current players turn was white
                     if(turn.equals("white")){
